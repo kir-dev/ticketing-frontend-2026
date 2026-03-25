@@ -3,13 +3,13 @@
 import axios from "axios";
 import { useState } from "react";
 
-const backendURL = "/api/ticketing"
+const backendURL = "/api/ticketing/boards"
 
 export default function Home() {
   const [inputValue, setInputValue] = useState<string>("")
 
   const onAdd = () => {
-    axios.post('/api/ticketing/boards', {
+    axios.post(backendURL, {
       title: inputValue
     }).then((res) => {
       setInputValue("")
