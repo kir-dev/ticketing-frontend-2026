@@ -1,11 +1,16 @@
 import { Board } from "@/types/board";
 import BoardItem from "./BoardItem";
 
-export default function BoardItems ({boards}: {boards: Board[]}) {
+interface BoardItemsProps {
+  boards: Board[],
+  getData: () => void
+}
+
+export default function BoardItems (props: BoardItemsProps) {
     return(
         <div className="overflow-auto">
-          {boards.map((board) => (
-            <BoardItem key={board.id} board={board} />
+          {props.boards.map((board) => (
+            <BoardItem key={board.id} board={board} getData={props.getData} />
           ))}
         </div>
     )

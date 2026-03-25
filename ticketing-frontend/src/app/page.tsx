@@ -1,6 +1,6 @@
 'use client'
 
-import axios from "axios";
+import axios, { getAdapter } from "axios";
 import { useEffect, useState } from "react";
 import { Board } from "@/types/board";
 import BoardItems from "@/components/BoardItems";
@@ -40,7 +40,7 @@ export default function Home() {
         <button onClick={onAdd}>
           Add
         </button>
-        <BoardItems boards={boards} />
+        <BoardItems boards={boards} getData={getBoards} />
       </div>
     </div>
   );
