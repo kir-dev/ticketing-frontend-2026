@@ -1,7 +1,11 @@
 import { Board } from "@/types/board";
 
-export default function BoardItem ({board}: {board: Board}) {
+interface BoardItemProps {
+  board: Board
+}
+
+export default function BoardItem (props: BoardItemProps) {
     return(
-      <div className="rounded-lg p-4 bg-slate-500 mt-5">{board.title}</div>
+      <div className="rounded-lg p-4 bg-slate-500 mt-5">{props.board.title}</div>
     )
 }
