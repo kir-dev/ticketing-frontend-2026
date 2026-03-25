@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 
 const backendURL = "/api/ticketing/boards"
 
-interface Board {
+type Board = {
   id: number;
   title: string;
   createdAt: string;
