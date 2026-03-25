@@ -1,12 +1,28 @@
+'use client'
+
 import Image from "next/image";
+import { useState } from "react";
 
 export default function Home() {
+  const [counter, setCounter] = useState(0)
+
+  const handleClick = () => {
+    setCounter(counter + 1)
+  }
+
+  console.log("render")
+
+  
+
   return (
-    <div className="min-h-screen bg-black flex flex-col flex-1 items-center justify-center">
-      <div className="flex flex-row font-sans text-3xl text-black bg-white rounded-full p-20 justify-center items-center">
+    <div className="min-h-screen bg-white flex flex-col flex-1 items-center justify-center">
+      <button 
+        className="flex flex-row font-sans text-3xl text-black bg-slate-400 rounded-full p-20 justify-center items-center hover:scale-105"
+        onClick={handleClick}
+      >
         <Image src={"/Kir-Dev.png"} width={200} height={200} alt="Kir-Dev" className="mr-4"/>
-        Greetings from Kir-Dev!
-      </div>
+        {counter}++++
+      </button>
     </div>
   );
 }
