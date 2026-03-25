@@ -1,11 +1,54 @@
-import Image from "next/image";
+'use client'
+
+import { BoardItem } from "@/components/BoardItem";
+import { Board } from "@/types/boards";
+import axios from "axios";
+import { useEffect, useState } from "react";
+
+const backendURL = "/api/ticketing"
 
 export default function Home() {
+  const [boards, setBoards] = useState<Board[]>([])
+  const [inputValue, setInputValue] = useState<string>("")
+
+  const onAdd = () => {
+    axios.post('/api/ticketing/boards', {
+      title: inputValue
+    }).then(() => {
+      setInputValue("")
+      console.log()
+    })
+  }
+
+  const getBoards = () => {
+    axios.get<Board[]>(`/api/ticketing/boards`).then((res) => {
+      console.log(res.data)
+      setBoards(res.data)
+    })
+  }
+  
+  useEffect(() => {
+    getBoards()
+  }, [])
+
+  
+
   return (
-    <div className="min-h-screen bg-black flex flex-col flex-1 items-center justify-center">
-      <div className="flex flex-row font-sans text-3xl text-black bg-white rounded-full p-20 justify-center items-center">
-        <Image src={"/Kir-Dev.png"} width={200} height={200} alt="Kir-Dev" className="mr-4"/>
-        Greetings from Kir-Dev!
+    <div className="min-h-screen bg-white text-black flex flex-col items-center">
+      <div className="mt-10">
+        <input
+          value={inputValue} 
+          onChange={(e) => setInputValue(e.target.value)} 
+          className="border-black border-2"
+        />
+        <button onClick={onAdd}>
+          Add
+        </button>
+      </div>
+      <div>
+        {boards.map((board) => 
+          <BoardItem key={board.id} board={board} />
+        )}
       </div>
     </div>
   );
