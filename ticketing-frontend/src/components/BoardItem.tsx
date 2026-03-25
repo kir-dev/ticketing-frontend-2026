@@ -19,6 +19,13 @@ export default function BoardItem (props: BoardItemProps) {
       props.getData()
     })
   }
+
+  const deleteBoard = () => {
+    axios.delete(`/api/ticketing/boards/${props.board.id}`).then((res) => {
+      console.log("Deleted board with id " + props.board.id + ": " + props.board)
+      props.getData()
+    })
+  }
   
   const handleEdit = () => {
     if (isEditing){
@@ -36,7 +43,7 @@ export default function BoardItem (props: BoardItemProps) {
       )}
       <div className="ml-auto flex flex-col gap-2">
         <button className="bg-green-500 px-4 rounded-md" onClick={handleEdit}>{isEditing ? "Save" : "Edit"}</button>
-        <button className="bg-red-500 px-4 rounded-md">Delete</button>
+        <button className="bg-red-500 px-4 rounded-md" onClick={deleteBoard}>Delete</button>
       </div>
     </div>
   )
