@@ -2,14 +2,10 @@
 
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { Board } from "@/types/board";
+import BoardItems from "@/components/BoardItems";
 
 const backendURL = "/api/ticketing/boards"
-
-interface Board {
-  id: number;
-  title: string;
-  createdAt: string;
-}
 
 export default function Home() {
   const [inputValue, setInputValue] = useState<string>("")
@@ -44,11 +40,7 @@ export default function Home() {
         <button onClick={onAdd}>
           Add
         </button>
-        <div className="overflow-auto">
-          {boards.map((board) => (
-            <div className="rounded-lg p-4 bg-slate-500 mt-5" key={board.id}>{board.title}</div>
-          ))}
-        </div>
+        <BoardItems boards={boards} />
       </div>
     </div>
   );
