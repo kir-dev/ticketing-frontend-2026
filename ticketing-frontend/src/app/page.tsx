@@ -18,11 +18,18 @@ export default function Home() {
       setInputValue("")
       getBoards()
       console.log(res.data)
+    }).catch((err) => {
+      console.error("Error adding board:", err)
     })
   }
 
   const getBoards = () => {
-    axios.get(backendURL).then((res) => setBoards(res.data))
+    axios
+        .get<Board[]>(backendURL)
+        .then((res) => setBoards(res.data))
+        .catch((err) => {
+          console.error("Error loading boards:", err)
+        })
   }
 
   useEffect(() => {
