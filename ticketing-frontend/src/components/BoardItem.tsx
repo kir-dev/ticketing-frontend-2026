@@ -23,7 +23,7 @@ export default function BoardItem (props: BoardItemProps) {
   const deleteBoard = () => {
     axios.delete(`/api/ticketing/boards/${props.board.id}`).then(() => {
       console.log("Deleted board with id " + props.board.id + ": " + props.board)
-      props.getData()
+      props.getBoards()
     })
   }
 
