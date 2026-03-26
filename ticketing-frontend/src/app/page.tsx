@@ -43,7 +43,7 @@ export default function Home() {
         <BoardInput inputValue={inputValue} setInputValue={setInputValue} onAdd={onAdd} />
         <div className="overflow-auto">
           {boards.map((board) => (
-              <BoardItem board={board} getData={getBoards} key={board.id} />
+              <BoardItem board={board} getBoards={getBoards} key={board.id} />
           ))}
         </div>
       </div>
