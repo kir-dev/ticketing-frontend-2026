@@ -14,14 +14,14 @@ export default function BoardItem (props: BoardItemProps) {
   const editBoard = () => {
     axios.patch(`/api/ticketing/boards/${props.board.id}`, {
       title: editInput
-    }).then((res) => {
+    }).then(() => {
       console.log("Edited board with id " + props.board.id + ": " + props.board)
       props.getData()
     })
   }
 
   const deleteBoard = () => {
-    axios.delete(`/api/ticketing/boards/${props.board.id}`).then((res) => {
+    axios.delete(`/api/ticketing/boards/${props.board.id}`).then(() => {
       console.log("Deleted board with id " + props.board.id + ": " + props.board)
       props.getData()
     })

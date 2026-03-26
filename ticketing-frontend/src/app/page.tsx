@@ -1,9 +1,9 @@
 'use client'
 
-import axios, { getAdapter } from "axios";
+import axios from "axios";
 import { useEffect, useState } from "react";
 import { Board } from "@/types/board";
-import BoardItems from "@/components/BoardItems";
+import BoardItem from "@/components/BoardItem";
 
 const backendURL = "/api/ticketing/boards"
 
@@ -40,7 +40,9 @@ export default function Home() {
         <button onClick={onAdd}>
           Add
         </button>
-        <BoardItems boards={boards} getData={getBoards} />
+        {boards.map((board) => (
+            <BoardItem key={board.id} board={board} getData={getBoards} />
+        ))}
       </div>
     </div>
   );
