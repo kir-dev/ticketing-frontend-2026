@@ -19,7 +19,7 @@ export default function BoardItem (props: BoardItemProps) {
       props.getData()
     })
   }
-  
+
   const handleEdit = () => {
     if (isEditing){
       editBoard()
