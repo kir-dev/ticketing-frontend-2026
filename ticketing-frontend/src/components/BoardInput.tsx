@@ -1,11 +1,28 @@
+import {useState} from "react";
+import axios from "axios";
+
 interface BoardInputProps {
-    inputValue: string;
-    setInputValue: (value: string) => void;
-    onAdd: () => void;
+    getBoards: () => void;
 }
 
+const backendURL = "/api/ticketing/boards"
+
 export default function BoardInput(props: BoardInputProps) {
-    const { inputValue, setInputValue, onAdd } = props;
+    const { getBoards } = props
+    const [inputValue, setInputValue] = useState<string>("")
+
+    const onAdd = () => {
+        axios.post(backendURL, {
+            title: inputValue
+        }).then((res) => {
+            setInputValue("")
+            getBoards()
+            console.log(res.data)
+        }).catch((err) => {
+            console.error("Error adding board:", err)
+        })
+    }
+
     return(
         <div>
             <input
