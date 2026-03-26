@@ -4,7 +4,7 @@ import { useState } from "react";
 
 interface BoardItemProps {
   board: Board,
-  getData: () => void
+  getBoards: () => void
 }
 
 export default function BoardItem (props: BoardItemProps) {
@@ -16,7 +16,7 @@ export default function BoardItem (props: BoardItemProps) {
       title: editInput
     }).then(() => {
       console.log("Edited board with id " + props.board.id + ": " + props.board)
-      props.getData()
+      props.getBoards()
     })
   }
 
