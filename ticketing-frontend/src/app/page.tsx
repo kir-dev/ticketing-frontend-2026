@@ -3,7 +3,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Board } from "@/types/board";
-import BoardItems from "@/components/BoardItems";
+import BoardItem from "@/components/BoardItem";
 
 const backendURL = "/api/ticketing/boards"
 
@@ -40,7 +40,9 @@ export default function Home() {
         <button onClick={onAdd}>
           Add
         </button>
-        <BoardItems boards={boards} />
+        {boards.map((board) => (
+            <BoardItem board={board} key={board.id} />
+        ))}
       </div>
     </div>
   );
