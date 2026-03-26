@@ -14,6 +14,8 @@ export default function Home() {
     }).then((res) => {
       setInputValue("")
       console.log(res.data)
+    }).catch((err) => {
+      console.error("Error adding board:", err)
     })
   }
 
