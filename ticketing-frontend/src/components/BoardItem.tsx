@@ -1,57 +1,106 @@
 import { Board } from "@/types/board";
 import { useState } from "react";
-import {useQueryClient} from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import useEditBoard from "@/hooks/useEditBoard";
 import useDeleteBoard from "@/hooks/useDeleteBoard";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Pencil, Trash2, Check, X } from "lucide-react";
 
 interface BoardItemProps {
-  board: Board,
+    board: Board;
 }
 
-export default function BoardItem (props: BoardItemProps) {
-  const [isEditing, setIsEditing] = useState<boolean>(false);
-  const [editInput, setEditInput] = useState<string>(props.board.title);
-  const queryClient = useQueryClient();
-  const boardEdit = useEditBoard()
-  const boardDelete = useDeleteBoard()
+export default function BoardItem({ board }: BoardItemProps) {
+    const [isEditing, setIsEditing] = useState(false);
+    const [editInput, setEditInput] = useState(board.title);
+    const queryClient = useQueryClient();
+    const boardEdit = useEditBoard();
+    const boardDelete = useDeleteBoard();
 
+    const handleRefresh = () => {
+        queryClient.invalidateQueries({ queryKey: ["boards"] });
+    };
 
-  const handleRefresh = () => {
-    queryClient.invalidateQueries({
-      queryKey: ["boards"]
-    })
-  }
+    const handleSave = () => {
+        boardEdit.mutateAsync({ id: board.id, title: editInput }).then(handleRefresh);
+        setIsEditing(false);
+    };
 
-  const editBoard = () => {
-    boardEdit.mutateAsync({id: props.board.id, title: editInput}).then(() => {
-      handleRefresh()
-    })
-  }
+    const handleCancel = () => {
+        setEditInput(board.title);
+        setIsEditing(false);
+    };
 
-  const deleteBoard = () => {
-    boardDelete.mutateAsync(props.board.id).then(() => {
-      handleRefresh()
-    })
-  }
+    const handleDelete = () => {
+        boardDelete.mutateAsync(board.id).then(handleRefresh);
+    };
 
-  const handleEdit = () => {
-    if (isEditing){
-      editBoard()
-    }
-    setIsEditing(!isEditing)
-  }
+    return (
+        <Card className="transition-all hover:shadow-sm group">
+            <CardContent className="flex items-center gap-3 py-3 px-4">
+                <div className="w-2 h-2 rounded-full bg-primary/40 shrink-0" />
 
-  return(
-    <div className="flex rounded-lg p-4 bg-slate-500 mt-5 gap-4">
-      {isEditing ? (
-        <input value={editInput} onChange={(e) => setEditInput(e.target.value)} className="bg-white max-h-10 rounded-lg border-black border-2" />
-      ) : (
-        <span>{props.board.title}</span>
-      )}
-      <div className="ml-auto flex flex-col gap-2">
-        <button className="bg-green-500 px-4 rounded-md" onClick={handleEdit}>{isEditing ? "Save" : "Edit"}</button>
-        <button className="bg-red-500 px-4 rounded-md" onClick={deleteBoard}>Delete</button>
-      </div>
-    </div>
-  )
+                {isEditing ? (
+                    <Input
+                        value={editInput}
+                        onChange={(e) => setEditInput(e.target.value)}
+                        onKeyDown={(e) => {
+                            if (e.key === "Enter") handleSave();
+                            if (e.key === "Escape") handleCancel();
+                        }}
+                        className="flex-1 h-8"
+                        autoFocus
+                    />
+                ) : (
+                    <span className="flex-1 font-medium text-sm">{board.title}</span>
+                )}
+
+                <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                    {isEditing ? (
+                        <>
+                            <Button
+                                size="icon"
+                                variant="ghost"
+                                onClick={handleSave}
+                                className="h-8 w-8 text-green-600 hover:text-green-700 hover:bg-green-50"
+                                disabled={boardEdit.isPending}
+                            >
+                                <Check className="w-4 h-4" />
+                            </Button>
+                            <Button
+                                size="icon"
+                                variant="ghost"
+                                onClick={handleCancel}
+                                className="h-8 w-8"
+                            >
+                                <X className="w-4 h-4" />
+                            </Button>
+                        </>
+                    ) : (
+                        <>
+                            <Button
+                                size="icon"
+                                variant="ghost"
+                                onClick={() => setIsEditing(true)}
+                                className="h-8 w-8"
+                            >
+                                <Pencil className="w-4 h-4" />
+                            </Button>
+                            <Button
+                                size="icon"
+                                variant="ghost"
+                                onClick={handleDelete}
+                                className="h-8 w-8 text-destructive hover:text-destructive hover:bg-destructive/10"
+                                disabled={boardDelete.isPending}
+                            >
+                                <Trash2 className="w-4 h-4" />
+                            </Button>
+                        </>
+                    )}
+                </div>
+            </CardContent>
+        </Card>
+    );
 }
