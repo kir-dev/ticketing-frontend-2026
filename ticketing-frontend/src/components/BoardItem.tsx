@@ -1,30 +1,34 @@
 import { Board } from "@/types/board";
 import axios from "axios";
 import { useState } from "react";
+import {useQuery, useQueryClient} from "@tanstack/react-query";
+import useEditBoard from "@/hooks/useEditBoard";
+import useDeleteBoard from "@/hooks/useDeleteBoard";
 
 interface BoardItemProps {
   board: Board,
-  getBoards: () => void
 }
 
 export default function BoardItem (props: BoardItemProps) {
-  const [isEditing, setIsEditing] = useState<boolean>(false)
-  const [editInput, setEditInput] = useState<string>(props.board.title)
+  const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [editInput, setEditInput] = useState<string>(props.board.title);
+  const queryClient = useQueryClient();
+  const boardEdit = useEditBoard()
+  const boardDelete = useDeleteBoard()
 
-  const editBoard = () => {
-    axios.patch(`/api/ticketing/boards/${props.board.id}`, {
-      title: editInput
-    }).then(() => {
-      console.log("Edited board with id " + props.board.id + ": " + props.board)
-      props.getBoards()
+
+  const handleRefresh = () => {
+    queryClient.invalidateQueries({
+      queryKey: ["boards"]
     })
   }
 
+  const editBoard = () => {
+    boardEdit.mutateAsync({id: props.board.id, title: editInput})
+  }
+
   const deleteBoard = () => {
-    axios.delete(`/api/ticketing/boards/${props.board.id}`).then(() => {
-      console.log("Deleted board with id " + props.board.id + ": " + props.board)
-      props.getBoards()
-    })
+    boardDelete.mutateAsync(props.board.id)
   }
 
   const handleEdit = () => {

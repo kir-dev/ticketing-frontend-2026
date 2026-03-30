@@ -1,39 +1,16 @@
 'use client'
 
-import axios from "axios";
-import { useEffect, useState } from "react";
-import { Board } from "@/types/board";
-import BoardItem from "@/components/BoardItem";
-import BoardInput from "@/components/BoardInput";
+import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
+import App from "@/app/app";
+import {ReactQueryDevtools} from "@tanstack/react-query-devtools";
 
-const backendURL = "/api/ticketing/boards"
+const queryClient = new QueryClient()
 
 export default function Home() {
-  const [boards, setBoards] = useState<Board[]>([])
-
-  const getBoards = () => {
-    axios
-        .get<Board[]>(backendURL)
-        .then((res) => setBoards(res.data))
-        .catch((err) => {
-          console.error("Error loading boards:", err)
-        })
-  }
-
-  useEffect(() => {
-    getBoards()
-  }, [])
-
-  return (
-    <div className="min-h-screen bg-white text-black flex flex-col items-center">
-      <div className="mt-10">
-        <BoardInput getBoards={getBoards} />
-        <div className="overflow-auto">
-          {boards.map((board) => (
-              <BoardItem board={board} getBoards={getBoards} key={board.id} />
-          ))}
-        </div>
-      </div>
-    </div>
-  );
+    return (
+        <QueryClientProvider client={queryClient}>
+            <App/>
+            <ReactQueryDevtools/>
+        </QueryClientProvider>
+    );
 }

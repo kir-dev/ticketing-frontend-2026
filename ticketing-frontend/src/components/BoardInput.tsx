@@ -1,25 +1,19 @@
 import {useState} from "react";
-import axios from "axios";
-
-interface BoardInputProps {
-    getBoards: () => void;
-}
+import useAddBoard from "@/hooks/useAddBoard";
+import {useQueryClient} from "@tanstack/react-query";
 
 const backendURL = "/api/ticketing/boards"
 
-export default function BoardInput(props: BoardInputProps) {
-    const { getBoards } = props
+export default function BoardInput() {
+    const addBoard = useAddBoard()
     const [inputValue, setInputValue] = useState<string>("")
+    const queryClient = useQueryClient();
 
     const onAdd = () => {
-        axios.post(backendURL, {
-            title: inputValue
-        }).then((res) => {
+        addBoard.mutateAsync(inputValue).then(() => {
+            queryClient.invalidateQueries({queryKey: ["boards"]})
+        }).then(() =>{
             setInputValue("")
-            getBoards()
-            console.log(res.data)
-        }).catch((err) => {
-            console.error("Error adding board:", err)
         })
     }
 
@@ -31,7 +25,7 @@ export default function BoardInput(props: BoardInputProps) {
                 className="border-black border-2"
             />
             <button onClick={onAdd}>
-                Add
+                {addBoard.isPending ? "Loading..." : "Add"}
             </button>
         </div>
     )
