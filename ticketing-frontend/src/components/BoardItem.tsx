@@ -24,11 +24,15 @@ export default function BoardItem (props: BoardItemProps) {
   }
 
   const editBoard = () => {
-    boardEdit.mutateAsync({id: props.board.id, title: editInput})
+    boardEdit.mutateAsync({id: props.board.id, title: editInput}).then(() => {
+      handleRefresh()
+    })
   }
 
   const deleteBoard = () => {
-    boardDelete.mutateAsync(props.board.id)
+    boardDelete.mutateAsync(props.board.id).then(() => {
+      handleRefresh()
+    })
   }
 
   const handleEdit = () => {
