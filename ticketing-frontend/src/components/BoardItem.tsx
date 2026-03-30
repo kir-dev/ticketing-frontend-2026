@@ -1,7 +1,6 @@
 import { Board } from "@/types/board";
-import axios from "axios";
 import { useState } from "react";
-import {useQuery, useQueryClient} from "@tanstack/react-query";
+import {useQueryClient} from "@tanstack/react-query";
 import useEditBoard from "@/hooks/useEditBoard";
 import useDeleteBoard from "@/hooks/useDeleteBoard";
 
